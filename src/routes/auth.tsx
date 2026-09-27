@@ -52,7 +52,7 @@ function AuthPage() {
         const { data, error } = await supabase.auth.signUp({
           email: p.data.email,
           password: p.data.password,
-          options: { emailRedirectTo: window.location.origin + "/auth", data: { full_name: p.data.full_name, account_type: "customer" } },
+          options: { emailRedirectTo: "https://roadrescue-liard.vercel.app/auth", data: { full_name: p.data.full_name, account_type: "customer" } },
         });
         if (error) return toast.error(error.message);
         if (!data.session) toast.success("Check your email to confirm your account, then sign in.");
@@ -90,10 +90,29 @@ function AuthPage() {
           <div className="space-y-2"><Label htmlFor="pw">Password</Label>
             <Input id="pw" type="password" autoComplete={register ? "new-password" : "current-password"} value={form.password} onChange={(e) => setForm({ ...form, password: e.target.value })} required /></div>
           <Button type="submit" size="lg" className="w-full" disabled={busy}>{busy ? "Please wait…" : register ? "Create account" : "Sign in"}</Button>
-          <p className="text-center text-sm text-muted-foreground">
-            {register ? "Already have an account?" : "New to RoadRescue?"}{" "}
-            <button type="button" className="font-semibold text-primary" onClick={() => setRegister(!register)}>{register ? "Sign in" : "Register"}</button>
-          </p>
+         <p className="text-center text-sm text-muted-foreground">
+  {register ? "Already have an account?" : "New to RoadRescue?"}{" "}
+  <button
+    type="button"
+    className="font-semibold text-primary"
+    onClick={() => setRegister(!register)}
+  >
+    {register ? "Sign in" : "Register"}
+  </button>
+
+  {!register && (
+    <>
+      {" "}
+      <span className="text-muted-foreground">|</span>{" "}
+      <Link
+      to="/forgot-password"
+        className="font-semibold text-primary"
+      >
+        Forgot password?
+      </Link>
+    </>
+  )}
+</p>
           <p className="border-t pt-4 text-center text-sm">
             Run a roadside business? <Link to="/register-provider" className="font-semibold text-primary">Register as a Service Provider</Link>
           </p>
